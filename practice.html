@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery Event Handler Practice Page</title>
+  <link href="styles/normalize.css" type="text/css" rel="stylesheet">
+  
+  <!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <style type="text/css">
+	.btn {
+		margin: 10px;
+	}
+
+	.spaced_element {
+		margin: 10px;
+	}
+
+	legend {
+		padding: 8px;
+	}
+  </style>
+
+  <script src="scripts/jquery-3.6.0.min.js"></script>
+
+  <script type = "text/javascript">
+
+	$(document).ready(function() {
+		
+		//Practice with jQuery Events
+		$("#alert_btn").click(function(event) {
+			window.alert("The button has been clicked ");
+		});
+
+		$("#bind_btn").bind("click", function(event) {
+			window.alert("The button has been clicked ");
+		});
+
+		$("#on_btn").on("click", function(event) {
+			window.alert("The button has been clicked ");
+		});
+
+		$("#one, #two").on("click", function(event) { 
+			var clicked_id = event.target.id;
+			window.alert("Button " + clicked_id + " has been clicked ");
+		});
+
+		$("div:first-of-type").css("width", "400px")
+							  .css("height", "400px")
+							  .css("background-color", "#CCCCCC");
+
+		$("body").on("click mouseenter mouseleave", "div:first-of-type", function() {
+			alert("the div was either clicked on the div, or the mouse entered the div, or the mouse left it")
+		});
+
+		$("div:first-of-type").on({
+			click: function() {
+				$("span").text("The div is clicked on!");
+			},
+			mouseenter: function() {
+				$("span").text("The mouse is hovered over the div!");
+			},
+			mouseleave: function() {
+				$("span").text("The mouse is left the div!");
+			}
+		});
+
+		$("a").on("click", function(e) { 
+			e.preventDefault();
+			$("a").css("color", "red");
+			alert(e.target.nodeName);
+		});
+
+		$(window).resize(function() {
+			var results = "Width= " + $(window).width() + " Height= " + $(window).height();
+			$("#dimensions").text(results);
+		});
+
+		$("#my_input").focus(function(){
+			$("#my_input").css("background-color", "#CCCCCC");
+		});
+
+		$("#my_input").blur(function(){
+			$("#my_input").css("background-color", "#FFFFFF");
+		});
+
+
+		$("#name").focus();
+		$("#my_form").submit(
+			function(event) {
+				var isValid = true;
+				var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b/;
+
+				var name = $("#name").val().trim();
+				if (name == "") { 
+					alert("Name is required.");
+					$("#name").css("border", "1px solid red");
+					isValid = false;
+				} else {
+					$("#name").val(name);
+					$("#name").css("border", "1px solid green");
+				}
+
+				var email = $("#email").val().trim();
+				if (email == "") { 
+					alert("Email is required.");
+					$("#email").css("border", "1px solid red");
+					isValid = false;
+				} else if ( !emailPattern.test(email) ) {
+					alert("Please insert a valid email address.");
+					$("#email").css("border", "1px solid red");
+					isValid = false;
+				} else {
+					$("#email").val(email);
+					$("#email").css("border", "1px solid green");
+				}
+
+				if (isValid == false) {
+					event.preventDefault(); 			
+				}
+				
+			}
+		);
+
+		
+	});
+
+  </script>
+
+</head>
+
+<body>
+
+	<p>
+		<input type="button" name="alert_btn" id="alert_btn" class="btn" value="Show Click Event" />
+	</p>
+	<p>
+		<input type="button" name="bind_btn" id="bind_btn" class="btn" value="Show Bind Event" />
+	</p>
+	<p>
+		<input type="button" name="on_btn" id="on_btn" class="btn" value="Show On Event" />
+	</p>
+	<p>
+		<input type="button" name="one" id="one" class="btn" value="Button One" />
+		<input type="button" name="two" id="two" class="btn" value="Show Two" />
+	</p>
+
+	<div class="spaced_element"></div>
+	<span class="spaced_element"></span>
+
+	<p>
+		<a href="www.modulemedia.com" id="the_link" class="spaced_element">Link</a>
+	</p>
+
+	<div id="dimensions" class="spaced_element"></div>
+
+	<input type="text" name="my_input" id="my_input" value="" class="spaced_element" />
+	
+	<form name="my_form" id="my_form" action="" method="get" class="spaced_element">
+		<fieldset>
+			<legend>Validation Form</legend>
+			<p>
+				<input type="text" name="name" id="name" value="" />
+			</p>
+			<p>
+				<input type="text" name="email" id="email" value="" />
+			</p>
+			<p>
+				<input type="submit" name="validate" id="validate" value="Validate" />
+			</p>
+		</fieldset>
+	</form>
+</body>
+</html>
